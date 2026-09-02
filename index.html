@@ -156,9 +156,51 @@ footer a{color:var(--blue2);text-decoration:none;}
   .about-grid{grid-template-columns:1fr;}
   .about-photo{max-width:240px;}
 }
+
+/* ══ SCROLL PROGRESS BAR ══ */
+.progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--blue2));width:0%;z-index:9999;transition:width 0.1s;}
+
+/* ══ PAGE TRANSITIONS ══ */
+.page{display:none;min-height:100vh;animation:none;}
+.page.active{display:flex;flex-direction:column;animation:fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+
+/* ══ TYPING CURSOR ══ */
+.home-name .cursor-blink{display:inline-block;width:6px;height:0.85em;background:var(--blue2);margin-left:6px;vertical-align:middle;animation:cursorBlink 1s step-end infinite;}
+@keyframes cursorBlink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ══ STAT COUNTERS ══ */
+.stat-row{display:flex;gap:40px;flex-wrap:wrap;margin:32px 0;}
+.stat-item{display:flex;flex-direction:column;gap:4px;}
+.stat-number{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--white);line-height:1;letter-spacing:-0.02em;}
+.stat-number span{color:var(--blue2);}
+.stat-label{font-size:0.72rem;color:var(--dim);letter-spacing:0.12em;text-transform:uppercase;font-weight:500;}
+
+/* ══ CONTACT FORM ══ */
+.contact-form{margin-top:36px;display:flex;flex-direction:column;gap:14px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-field{display:flex;flex-direction:column;gap:6px;}
+.form-field label{font-size:0.68rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim);}
+.form-field input,.form-field textarea{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--white);font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:300;outline:none;transition:border-color 0.2s,background 0.2s;resize:none;}
+.form-field input:focus,.form-field textarea:focus{border-color:rgba(26,111,212,0.5);background:rgba(26,111,212,0.05);}
+.form-field input::placeholder,.form-field textarea::placeholder{color:var(--dim);}
+.form-submit{margin-top:4px;}
+.form-success{display:none;font-size:0.88rem;color:var(--blue2);margin-top:8px;letter-spacing:0.04em;}
+
+/* ══ ACTIVE NAV GLOW ══ */
+.inner-nav-links a.active{color:var(--blue2) !important;background:rgba(26,111,212,0.1) !important;box-shadow:0 0 12px rgba(26,111,212,0.15);}
+
+/* ══ PROJECT FILTER ══ */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+.filter-btn{font-size:0.68rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--dim);cursor:pointer;transition:all 0.2s;}
+.filter-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
+.filter-btn.active{background:var(--blue-dim);border-color:rgba(26,111,212,0.4);color:var(--blue2);}
+.project-card{transition:all 0.3s cubic-bezier(0.22,1,0.36,1);}
+.project-card.hidden{opacity:0;pointer-events:none;transform:scale(0.96);}
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <!-- ══════════════ HOME ══════════════ -->
 <div id="page-home" class="page active">
@@ -202,6 +244,13 @@ footer a{color:var(--blue2);text-decoration:none;}
     <h1 class="page-title">Projects</h1>
   </div>
   <div class="page-body">
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterProjects('all',this)">All</button>
+      <button class="filter-btn" onclick="filterProjects('Engineering',this)">Engineering</button>
+      <button class="filter-btn" onclick="filterProjects('Academic',this)">Academic</button>
+      <button class="filter-btn" onclick="filterProjects('Writing',this)">Writing</button>
+      <button class="filter-btn" onclick="filterProjects('Capstone',this)">Capstone</button>
+    </div>
     <div class="projects-grid">
 
       <!-- PROJECT 1 — Lit Review -->
@@ -249,7 +298,7 @@ footer a{color:var(--blue2);text-decoration:none;}
       <!-- PROJECT 3 — Spotify ESP32 (from personal statement) -->
       <div class="project-card reveal">
         <div class="project-photo">
-          <div class="project-photo-placeholder"><span>🎵</span>Add project photo</div>
+          <img src="spotify_controller.png" alt="Spotify ESP32 Controller" />
         </div>
         <div class="project-info">
           <p class="project-num">03</p>
@@ -332,6 +381,12 @@ footer a{color:var(--blue2);text-decoration:none;}
   <div class="page-header reveal">
     <p class="page-label">Experience</p>
     <h1 class="page-title">Career</h1>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-number" data-target="50" data-suffix="%">0%</div><div class="stat-label">Validation Time Saved</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="20" data-prefix="$" data-suffix="K+">$0K+</div><div class="stat-label">New Contracts Closed</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="100" data-suffix="K+">0K+</div><div class="stat-label">Products Processed</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="3" data-suffix=".43 GPA">0 GPA</div><div class="stat-label">Academic Achievement</div></div>
+    </div>
   </div>
   <div class="page-body">
 
@@ -511,7 +566,20 @@ footer a{color:var(--blue2);text-decoration:none;}
             <a href="https://github.com/ErnestRes" target="_blank">github.com/ErnestRes</a>
           </p>
         </div>
-        <div class="about-cta">
+
+      <p class="about-section-label" style="margin-top:32px;">Get In Touch</p>
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-field"><label>Name</label><input type="text" id="cf-name" placeholder="Your name"/></div>
+          <div class="form-field"><label>Email</label><input type="email" id="cf-email" placeholder="your@email.com"/></div>
+        </div>
+        <div class="form-field"><label>Message</label><textarea id="cf-message" rows="4" placeholder="What's on your mind?"></textarea></div>
+        <div class="form-submit">
+          <button class="btn btn-primary" onclick="submitForm()">Send Message</button>
+          <p class="form-success" id="form-success">✓ Message sent — I'll be in touch soon.</p>
+        </div>
+      </div>
+        <div class="about-cta" style="margin-top:32px;">
           <a href="Resume_Ernest_Reschke.pdf" download class="btn btn-primary">⬇ Resume</a>
           <a href="personal_statement.pdf" download class="btn">⬇ Personal Statement</a>
           <a href="#" class="btn" onclick="showPage('career');return false;">View Career</a>
@@ -523,12 +591,17 @@ footer a{color:var(--blue2);text-decoration:none;}
 </div>
 
 <script>
+// ── Page transitions ──
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
+  const target = document.getElementById('page-' + id);
+  target.classList.add('active');
   window.scrollTo(0, 0);
   setTimeout(triggerReveals, 60);
+  if(id !== 'home') setTimeout(() => animateCounters(), 300);
 }
+
+// ── Scroll reveal ──
 function triggerReveals() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }});
@@ -536,6 +609,90 @@ function triggerReveals() {
   document.querySelectorAll('.page.active .reveal:not(.visible)').forEach(el => obs.observe(el));
 }
 triggerReveals();
+
+// ── Scroll progress bar ──
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight) * 100;
+  document.getElementById('progressBar').style.width = scrolled + '%';
+});
+
+// ── Typing animation on home name ──
+(function typeWriter() {
+  const el = document.querySelector('.home-name');
+  if(!el) return;
+  const lines = ['Ernest', 'Reschke'];
+  el.innerHTML = '';
+  let lineIdx = 0, charIdx = 0;
+  let html = '';
+
+  function type() {
+    if(lineIdx >= lines.length) {
+      el.innerHTML = html + '<span class="cursor-blink"></span>';
+      setTimeout(() => { el.querySelector('.cursor-blink')?.remove(); }, 2800);
+      return;
+    }
+    const line = lines[lineIdx];
+    if(charIdx < line.length) {
+      html += line[charIdx];
+      el.innerHTML = html + (lineIdx < lines.length - 1 || charIdx < line.length - 1 ? '<span class="cursor-blink"></span>' : '');
+      charIdx++;
+      setTimeout(type, 80);
+    } else {
+      html += '<br>';
+      lineIdx++;
+      charIdx = 0;
+      setTimeout(type, 120);
+    }
+  }
+  setTimeout(type, 400);
+})();
+
+// ── Animated stat counters ──
+function animateCounters() {
+  document.querySelectorAll('.page.active [data-target]').forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const duration = 1200;
+    const start = performance.now();
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = target < 10 ? (eased * target).toFixed(2) : Math.round(eased * target);
+      el.textContent = prefix + val + suffix;
+      if(progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+// ── Project filter ──
+function filterProjects(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.project-card').forEach(card => {
+    const cardTag = card.querySelector('.project-tag')?.textContent.trim();
+    if(tag === 'all' || cardTag === tag) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+
+// ── Contact form ──
+function submitForm() {
+  const name    = document.getElementById('cf-name').value.trim();
+  const email   = document.getElementById('cf-email').value.trim();
+  const message = document.getElementById('cf-message').value.trim();
+  if(!name || !email || !message) { alert('Please fill in all fields.'); return; }
+  window.location.href = `mailto:ernest.reschke1@gmail.com?subject=Message from ${encodeURIComponent(name)}&body=${encodeURIComponent(message + '\n\nFrom: ' + email)}`;
+  document.getElementById('form-success').style.display = 'block';
+  document.getElementById('cf-name').value = '';
+  document.getElementById('cf-email').value = '';
+  document.getElementById('cf-message').value = '';
+}
 </script>
 </body>
 </html>
